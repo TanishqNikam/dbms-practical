@@ -74,11 +74,6 @@ WHERE Designation IN ('Manager', 'Market Analyst');
 
 SELECT * FROM employee
 WHERE MONTH(Date_of_Joining) = 8;
-#another method
-SELECT *
-FROM employee
-WHERE Date_of_Joining LIKE '____
-
 
 SELECT * FROM employee
 WHERE Date_of_Joining > '2006-12-31';
