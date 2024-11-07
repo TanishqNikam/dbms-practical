@@ -7,6 +7,8 @@ Display the department name whose employees are more than one
 Rename employee table as emp1
 Add a new column city in the employee table.
 
+-
+
 create database employeeinfo;
 
 use employeeinfo;
