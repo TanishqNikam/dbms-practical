@@ -1,3 +1,14 @@
+1) Consider the relation employee (emp_id,e_name,salary ,Date of Joining,Dapt_no,Designation) perform basic SQL operations.
+Create table employee.
+Insert 10 records in table.
+Create a view emp_vl of table employee which  has emp_id , name and dept-attributes.
+Create view of table.
+Update dept of any employee in view. Check whether it  gets updated or not.
+Create emp_id as primary key and show indices on table employee.
+Show indices on table.
+Create user defined index on any column. 
+
+-
 
 create database employee;
 
