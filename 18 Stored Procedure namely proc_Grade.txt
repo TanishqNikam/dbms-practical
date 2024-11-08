@@ -1,0 +1,41 @@
+CREATE DATABASE studinfo;
+USE studinfo;
+
+CREATE TABLE Stud_Marks (
+    name VARCHAR(100),
+    total_marks INT
+);
+
+CREATE TABLE Result (
+    roll_no INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    grade VARCHAR(20)
+);
+
+DELIMITER //
+CREATE PROCEDURE proc_Grade()
+BEGIN
+    INSERT INTO Result (name, grade)
+    SELECT 
+        name,
+        CASE
+            WHEN total_marks >= 990 AND total_marks <= 1500 THEN 'Distinction'
+            WHEN total_marks BETWEEN 900 AND 989 THEN 'First Class'
+            WHEN total_marks BETWEEN 825 AND 899 THEN 'Higher Second Class'
+            ELSE 'Pass'
+        END AS grade
+    FROM Stud_Marks;
+END //
+DELIMITER ;
+
+-- Sample Data for Testing
+INSERT INTO Stud_Marks (name, total_marks) VALUES
+('Amit Kumar', 1200),
+('Neha Singh', 950),
+('Rajesh Patil', 870),
+('Priya Desai', 820),
+('Rakesh Sharma', 880);
+call proc_grade();
+select * from Stud_marks;
+select * from result;
+

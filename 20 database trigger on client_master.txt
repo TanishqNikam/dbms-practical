@@ -1,0 +1,69 @@
+create database clientinfo;
+use clientinfo;
+
+CREATE TABLE client_master (
+    c_id INT PRIMARY KEY,
+    c_name VARCHAR(100),
+    acc_no INT
+);
+
+-- 20.2 Create the client_Audit table to store changes
+CREATE TABLE client_Audit (
+    audit_id INT AUTO_INCREMENT PRIMARY KEY,
+    c_id INT,
+    c_name VARCHAR(100),
+    acc_no INT,
+    action_type VARCHAR(10)
+
+);
+
+-- 20.3 Insert sample data into client_master table
+INSERT INTO client_master (c_id, c_name, acc_no) VALUES
+(1, 'Amit Kumar', 12345),
+(2, 'Neha Singh', 67890),
+(3, 'Rajesh Patil', 11223);
+
+-- Display table contents before trigger actions
+SELECT * FROM client_master;
+
+
+DELIMITER //
+
+-- Trigger to track insertions into client_master
+CREATE TRIGGER client_insert_audit
+AFTER INSERT ON client_master
+FOR EACH ROW
+BEGIN
+    INSERT INTO client_Audit (c_id, c_name, acc_no, action_type)
+    VALUES (NEW.c_id, NEW.c_name, NEW.acc_no, 'INSERT');
+END;
+//
+
+
+CREATE TRIGGER client_update_audit
+AFTER UPDATE ON client_master
+FOR EACH ROW
+BEGIN
+    INSERT INTO client_Audit (c_id, c_name, acc_no, action_type)
+    VALUES (OLD.c_id, OLD.c_name, OLD.acc_no, 'UPDATE');
+END;
+//
+
+
+DELIMITER ;
+
+
+INSERT INTO client_master (c_id, c_name, acc_no) VALUES (4, 'Pooja Verma', 33445);
+
+
+UPDATE client_master
+SET acc_no = 55678
+WHERE c_id = 1;
+
+update client_master
+set acc_no=999
+where c_id=1;
+
+
+SELECT * FROM client_Audit;
+

@@ -1,0 +1,62 @@
+CREATE DATABASE custinfo;
+USE custinfo;
+
+-- 19.1 Create the customer table
+CREATE TABLE customer (
+    cust_id INT PRIMARY KEY,
+    c_name VARCHAR(100),
+    addr VARCHAR(100)
+);
+
+-- 19.2 Create the cust_Audit table to store changes
+CREATE TABLE cust_Audit (
+    audit_id INT AUTO_INCREMENT PRIMARY KEY,
+    cust_id INT,
+    c_name VARCHAR(100),
+    addr VARCHAR(100),
+    action_type VARCHAR(10)
+);
+
+-- Insert initial data
+INSERT INTO customer (cust_id, c_name, addr) VALUES
+(1, 'Amit Kumar', 'Mumbai'),
+(2, 'Neha Singh', 'Delhi'),
+(3, 'Rajesh Patil', 'Bangalore');
+
+SELECT * FROM customer;
+
+-- Set delimiter for triggers
+DELIMITER //
+
+-- Trigger for update audit
+CREATE TRIGGER customer_update_audit
+AFTER UPDATE ON customer
+FOR EACH ROW
+BEGIN
+    INSERT INTO cust_Audit (cust_id, c_name, addr, action_type)
+    VALUES (OLD.cust_id, OLD.c_name, OLD.addr, 'UPDATE');
+END;
+//
+
+-- Trigger for delete audit
+CREATE TRIGGER customer_delete_audit
+AFTER DELETE ON customer
+FOR EACH ROW
+BEGIN
+    INSERT INTO cust_Audit (cust_id, c_name, addr, action_type)
+    VALUES (OLD.cust_id, OLD.c_name, OLD.addr, 'DELETE');
+END;
+//
+
+DELIMITER ;
+
+-- Test update and delete actions
+UPDATE customer
+SET addr = 'Hyderabad'
+WHERE cust_id = 1;
+
+DELETE FROM customer
+WHERE cust_id = 2;
+
+-- Check the audit table
+SELECT * FROM cust_Audit;
